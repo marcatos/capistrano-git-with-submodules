@@ -30,12 +30,12 @@ class Capistrano::SCM::Git::WithSubmodules < Capistrano::Plugin
                 execute :git, :reset, '--mixed', quiet, fetch(:branch), '--'
                 update_submodule = proc do
                   execute :git, :submodule, 'update',
-                          '--init', '--checkout', '--recursive', quiet
+                          '--init', '--checkout', quiet
                 end
                 begin
                   update_submodule.call
                 rescue SSHKit::Command::Failed
-                  execute :git, :submodule, 'sync', '--recursive', quiet
+                  execute :git, :submodule, 'sync', quiet
                   update_submodule.call
                 end
                 execute :find, release_path, "-name '.git'", "|",  "xargs -I {} rm -rf#{verbose} '{}'"
